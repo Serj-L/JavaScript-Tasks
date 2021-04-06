@@ -238,7 +238,9 @@ function encodeToRot13(str) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-    throw new Error('Not implemented');
+    const toString = Object.prototype.toString;
+    if (toString.call(value) === "[object String]") {return true}
+    else {return false};
 }
 
 
