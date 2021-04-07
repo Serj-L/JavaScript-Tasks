@@ -7,7 +7,8 @@
     "test-strings": "E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/node_modules/.bin/mocha E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/test/01-strings-tests.js",
     "test-numbers": "E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/node_modules/.bin/mocha E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/test/02-numbers-tests.js",
     "test-date": "E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/node_modules/.bin/mocha E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/test/03-date-tests.js",
-    "test-arrays": "E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/node_modules/.bin/mocha E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/test/04-arrays-tests.js",
+
+    "test-arrays": "E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/node_modules/.bin/mochaE:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/test/04-arrays-tests.js",
     "test-regex": "E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/node_modules/.bin/mocha E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/test/05-regex-tests.js",
     "test-conditions-n-loops": "E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/node_modules/.bin/mocha E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/test/06-conditions-n-loops-tests.js",
     "test-yield": "E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/node_modules/.bin/mocha E:/Dropbox/Develope/Projects/Serj/TeachMeSkills/JS/Lepnyakov-Sergey/test/07-yield-tests.js",
