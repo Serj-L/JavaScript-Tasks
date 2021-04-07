@@ -54,12 +54,11 @@ function getCicleCircumference(radius) {
  *  -3, 3  => 0
  */
 function getAverage(value1, value2) {
-    /* let sum = 0;
-        for (let i = 0; i < arguments.length; i++) {
-        sum += arguments[i];
-        }
-    return sum / arguments.length; */
-    throw new Error('Not implemented');
+    let sumOfArguments = 0;
+    for (let i = 0; i < arguments.length; i++) {
+        sumOfArguments += arguments[i]/Number.MAX_SAFE_INTEGER;
+    }
+    return sumOfArguments / arguments.length * Number.MAX_SAFE_INTEGER;
 }
 
 /**
@@ -134,7 +133,6 @@ function getAngleBetweenVectors(x1, y1, x2, y2) {
  */
 function getLastDigit(value) {
     return value % 10;
-
 }
 
 
