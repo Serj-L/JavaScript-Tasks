@@ -213,6 +213,9 @@ function isPrime(n) {
     let trialDivison = 1;
     for(let i = 2; i <= Math.sqrt(n); i++) {
         trialDivison *= n % i;
+        if (n % i === 0) {
+            break;
+        }
     }
 
     if (n > 0 && n <= 3) {
