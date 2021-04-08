@@ -165,7 +165,9 @@ function parseNumberFromString(value) {
  *   1,2,3   => 3.741657386773941
  */
 function getParallelipidedDiagonal(a,b,c) {
-    throw new Error('Not implemented');
+    const parallelipidedDiagonal = Math.sqrt(a ** 2 + b ** 2 + c ** 2);
+    const cubeDiagonal = a * Math.sqrt(3);
+    return a === b && a === c ? cubeDiagonal : parallelipidedDiagonal;
 }
 
 /**
