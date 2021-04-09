@@ -56,9 +56,11 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   throw new Error('Not implemented');
+   const increaseDate = date.setDate(29);
+   const analyzeDate = new Date(increaseDate);
+   const monthOfAnalyzeDate = analyzeDate.getMonth();
+   return monthOfAnalyzeDate <= 1 ? true : false;
 }
-
 
 /**
  * Returns the string represention of the timespan between two dates.
@@ -94,7 +96,7 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-    throw new Error('Not implemented');
+   throw new Error('Not implemented');
 }
 
 
