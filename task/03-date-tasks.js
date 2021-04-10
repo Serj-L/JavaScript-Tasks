@@ -102,7 +102,15 @@ return `${`0${hh}`.slice(-2)}:${`0${mm}`.slice(-2)}:${`0${ss}`.slice(-2)}.${`00$
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-   throw new Error('Not implemented');
+   const analyzeDate = new Date(date)
+   const hours24 = analyzeDate.getUTCHours();
+   const hours12 = hours24 > 12 ? hours24 - 12 : hours24;
+   const minutes = analyzeDate.getUTCMinutes();
+   const angleCalcDeg = Math.abs( 0.5 * (60 * hours12 - 11 * minutes) );
+   const angleDeg = angleCalcDeg > 180 ? 360 - angleCalcDeg : angleCalcDeg;
+   const angleRad = angleDeg * Math.PI / 180;
+
+   return angleRad;
 }
 
 
