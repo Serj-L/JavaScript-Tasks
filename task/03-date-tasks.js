@@ -56,8 +56,8 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   const startDate = new Date(date);
-   const endDate = new Date(date.setFullYear(date.getFullYear()+1));
+   const startDate = new Date(date.getFullYear(),0);
+   const endDate = new Date(date.getFullYear()+1,0);
    const daysInYear = Math.floor((endDate - startDate) / 86400000);
    return daysInYear > 365 ? true : false;
 }
