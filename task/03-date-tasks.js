@@ -56,10 +56,10 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   const increaseDate = date.setDate(29);
-   const analyzeDate = new Date(increaseDate);
-   const monthOfAnalyzeDate = analyzeDate.getMonth();
-   return monthOfAnalyzeDate <= 1 ? true : false;
+   const startDate = new Date(date);
+   const endDate = new Date(date.setFullYear(date.getFullYear()+1));
+   const daysInYear = Math.floor((endDate - startDate) / 86400000);
+   return daysInYear > 365 ? true : false;
 }
 
 /**
@@ -78,7 +78,13 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
-   throw new Error('Not implemented');
+const durationMs = endDate - startDate;
+const sss = durationMs % 1000;
+const ss = Math.floor(durationMs / 1000) % 60;
+const mm = Math.floor(durationMs / 60000) % 60;
+const hh = Math.floor(durationMs / 3600000) % 24;
+
+return `${`0${hh}`.slice(-2)}:${`0${mm}`.slice(-2)}:${`0${ss}`.slice(-2)}.${`00${sss}`.slice(-3)}`;
 }
 
 
