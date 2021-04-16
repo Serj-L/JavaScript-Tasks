@@ -22,15 +22,14 @@
  *    console.log(r.height);      // => 20
  *    console.log(r.getArea());   // => 200
  */
+
 function Rectangle(width, height) {
-    const rectangle = {
-        width,
-        height,
-        getArea() {
-        return width * height
-        },
+    this.width = width,
+    this.height = height,
+
+    Rectangle.prototype.getArea = function () {
+        return this.width * this.height
     }
-    return rectangle;
 }
 
 
@@ -60,8 +59,10 @@ function getJSON(obj) {
  *    var r = fromJSON(Rectangle.prototype, '{"width":10, "height":20}');
  *
  */
-function fromJSON(proto, json) {
-    throw new Error('Not implemented');
+ function fromJSON(proto, json) {
+    const fromJsonObj = JSON.parse(json);
+    Object.setPrototypeOf(fromJsonObj, proto);
+    return fromJsonObj;
 }
 
 
@@ -136,7 +137,7 @@ const cssSelectorBuilder = {
     },
 
     pseudoElement: function(value) {
-        throw new Error('Not implemented');
+        throw new Error('Not implemented');;
     },
 
     combine: function(selector1, combinator, selector2) {
