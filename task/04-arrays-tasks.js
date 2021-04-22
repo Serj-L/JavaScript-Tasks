@@ -509,7 +509,9 @@ function getIdentityMatrix(n) {
  *     3, 3   => [ 3 ]
  */
 function getIntervalArray(start, end) {
-   throw new Error('Not implemented');
+   const emptyArr = new Array(end - start + 1).join().split(',');
+   const arrayOfInteg = emptyArr.map((number, index) => number = start + index);
+   return arrayOfInteg;
 }
 
 /**
