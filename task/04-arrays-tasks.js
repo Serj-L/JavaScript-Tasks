@@ -252,7 +252,7 @@ return arr.map((number,index) => number = arr.slice(0, index + 1).reduce((sum, e
  * [ "a" ] => []
  */
 function getSecondItems(arr) {
-   throw new Error('Not implemented');
+   return arr.filter((_, index) => index % 2 !== 0)
 }
 
 
