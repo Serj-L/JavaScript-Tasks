@@ -617,7 +617,15 @@ function getElementByIndexes(arr, indexes) {
  *
  */
 function swapHeadAndTail(arr) {
-    throw new Error('Not implemented');
+   const headArr = arr.slice(0, Math.floor(arr.length / 2));
+   const tailArr = arr.slice(-Math.floor(arr.length / 2));
+   const middleArr = () => {
+      if(arr.length % 2 === 0) {return []};
+      return [arr[arr.length - Math.floor(arr.length / 2) - 1]];
+   };
+   const swapArr = tailArr.concat(middleArr(), headArr)
+
+   return arr.length > 1 ? swapArr : arr;
 }
 
 
