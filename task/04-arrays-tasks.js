@@ -333,7 +333,39 @@ function getPositivesCount(arr) {
  *   [ 'one','one','one','zero' ]     => [ 'zero','one','one','one' ]
  */
 function sortDigitNamesByNumericOrder(arr) {
-   throw new Error('Not implemented');
+   const numericArr = arr.map(number => {
+      if(number === 'zero') {return 0};
+      if(number === 'one') {return 1};
+      if(number === 'two') {return 2};
+      if(number === 'three') {return 3};
+      if(number === 'four') {return 4};
+      if(number === 'five') {return 5};
+      if(number === 'six') {return 6};
+      if(number === 'seven') {return 7};
+      if(number === 'eight') {return 8};
+      if(number === 'nine') {return 9};
+      if(number === 'ten') {return 10};
+      return 'unknown digit name';
+   });
+
+   const sortNumericArr = numericArr.sort( (a, b) => a - b );
+
+   const sortArr = sortNumericArr.map(number => {
+      if(number === 0) {return 'zero'};
+      if(number === 1) {return 'one'};
+      if(number === 2) {return 'two'};
+      if(number === 3) {return 'three'};
+      if(number === 4) {return 'four'};
+      if(number === 5) {return 'five'};
+      if(number === 6) {return 'six'};
+      if(number === 7) {return 'seven'};
+      if(number === 8) {return 'eight'};
+      if(number === 9) {return 'nine'};
+      if(number === 10) {return 'ten'};
+      return 'unknown digit name';
+   });
+
+   return sortArr;
 }
 
 /**
