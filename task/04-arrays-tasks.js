@@ -271,7 +271,12 @@ function getSecondItems(arr) {
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
 function propagateItemsByPositionIndex(arr) {
-   throw new Error('Not implemented');
+
+   return arr.flatMap((number, index) => {
+      let multArr = new Array(index + 1);
+      return number = multArr.fill(number);
+   })
+
 }
 
 
