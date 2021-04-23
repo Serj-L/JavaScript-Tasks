@@ -563,7 +563,14 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-   throw new Error('Not implemented');
+
+   const multimap = array.reduce((accumulator, item) => {
+      accumulator[keySelector(item)] = accumulator[keySelector(item)] || [];
+      accumulator[keySelector(item)].push(valueSelector(item));
+      return accumulator;
+   }, {});
+
+   return new Map(Object.entries(multimap));
 }
 
 
