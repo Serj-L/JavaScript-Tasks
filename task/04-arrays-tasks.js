@@ -603,31 +603,24 @@ function selectMany(arr, childrenSelector) {
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
 function getElementByIndexes(arr, indexes) {
-   const resault = () =>{
-     let res = arr.find((el, index) => index === indexes[0]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[1]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[2]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[3]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[4]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[5]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[6]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[7]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[8]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[9]);
-     if (Array.isArray(res) === false) {return res};
-     res = res.find((el, index) => index === indexes[10]);
-     return console.log('Error - the specified nesting level of array elements has been exceeded');
-   };
-   return resault();
+   let counter = 1;
+
+   function reReduce (acc, value, index) {
+      if (index === indexes[counter] && Array.isArray(value) === false) {return acc = value}
+      if (index === indexes[counter] && Array.isArray(value) === true) {
+         counter++;
+         return value.reduce(reReduce, acc);
+      }
+      return acc;
+    }
+
+    let result = arr.reduce((acc, value, index) => {
+      if (index === indexes[0] && Array.isArray(value) === false) {return acc = value}
+      if (index === indexes[0] && Array.isArray(value) === true) {return acc = value.reduce(reReduce, acc)}
+      return acc;
+    }, null);
+
+  return result;
 }
 
 
