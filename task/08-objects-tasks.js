@@ -115,36 +115,96 @@ function getJSON(obj) {
  */
 
 const cssSelectorBuilder = {
+    prevType: null,
 
     element: function(value) {
-        throw new Error('Not implemented');
+        if (this.prevType === 'element') {
+            throw 'Element, id and pseudo-element should not occur more then one time inside the selector'
+        }
+        if (this.prevType) {
+            throw 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+        }
+        let prevValue = this.value || '';
+        let newValue = prevValue + value;
+
+        return {...cssSelectorBuilder, value: newValue, prevType: 'element'};
     },
 
     id: function(value) {
-        throw new Error('Not implemented');
+        if (this.prevType === 'id') {
+            throw 'Element, id and pseudo-element should not occur more then one time inside the selector'
+        }
+        if (this.prevType &&
+            this.prevType !== 'element') {
+            throw 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+        }
+        let prevValue = this.value || '';
+        let newValue = prevValue + `#${value}`;
+
+        return {...cssSelectorBuilder, value: newValue, prevType: 'id'};
     },
 
     class: function(value) {
-        throw new Error('Not implemented');
+        if (this.prevType &&
+            this.prevType !== 'element' &&
+            this.prevType !== 'id' &&
+            this.prevType !== 'class' ) {
+            throw 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+        }
+        let prevValue = this.value || '';
+        let newValue = prevValue + `.${value}`;
+
+        return {...cssSelectorBuilder, value: newValue, prevType: 'class'};
     },
 
     attr: function(value) {
-        throw new Error('Not implemented');
+        if (this.prevType &&
+            this.prevType !== 'element' &&
+            this.prevType !== 'id' &&
+            this.prevType !== 'class' &&
+            this.prevType !== 'attr' ) {
+            throw 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+        }
+        let prevValue = this.value || '';
+        let newValue = prevValue + `[${value}]`;
+
+        return {...cssSelectorBuilder, value: newValue, prevType: 'attr'};
     },
 
     pseudoClass: function(value) {
-        throw new Error('Not implemented');
+        if (this.prevType &&
+            this.prevType !== 'element' &&
+            this.prevType !== 'id' &&
+            this.prevType !== 'class' &&
+            this.prevType !== 'attr' &&
+            this.prevType !== 'pseudoClass' ) {
+                throw 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+        }
+        let prevValue = this.value || '';
+        let newValue = prevValue + `:${value}`;
+
+        return {...cssSelectorBuilder, value: newValue, prevType: 'pseudoClass'};
     },
 
     pseudoElement: function(value) {
-        throw new Error('Not implemented');;
+        if (this.prevType === 'pseudoElement') {
+            throw 'Element, id and pseudo-element should not occur more then one time inside the selector'
+        }
+        let prevValue = this.value || '';
+        let newValue = prevValue + `::${value}`;
+
+        return {...cssSelectorBuilder, value: newValue, prevType: 'pseudoElement'};
     },
 
     combine: function(selector1, combinator, selector2) {
-        throw new Error('Not implemented');
+        let newValue = `${selector1.value} ${combinator} ${selector2.value}`;
+        return {...cssSelectorBuilder, value: newValue};
+    },
+
+    stringify: function() {
+        return this.value
     },
 };
-
 
 module.exports = {
     Rectangle: Rectangle,
