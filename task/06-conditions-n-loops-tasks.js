@@ -175,7 +175,9 @@ function isInsideCircle(circle, point) {
  *   'entente' => null
  */
 function findFirstSingleChar(str) {
-    throw new Error('Not implemented');
+    const arrayFromStr = str.replace(/[ ]/g, "").split('');
+    const arrayUniqValues = arrayFromStr.filter((el, ind, arr) => arr.indexOf(el) === arr.lastIndexOf(el));
+    return arrayUniqValues[0];
 }
 
 
