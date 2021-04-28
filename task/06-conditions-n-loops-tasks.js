@@ -91,7 +91,6 @@ function getSumBetweenNumbers(n1, n2) {
  */
 function isTriangle(a,b,c) {
     return a + b > c && a + c > b && b + c > a ? true : false;
-    throw new Error('Not implemented');
 }
 
 
@@ -128,6 +127,7 @@ function isTriangle(a,b,c) {
  *
  */
 function doRectanglesOverlap(rect1, rect2) {
+    return rect1.top + rect1.height >= rect2.top && rect1.left + rect1.width >= rect2.left ? true : false;
     throw new Error('Not implemented');
 }
 
