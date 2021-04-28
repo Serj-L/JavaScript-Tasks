@@ -220,7 +220,8 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
  * 'noon' => 'noon'
  */
 function reverseString(str) {
-    throw new Error('Not implemented');
+    const reverseArrayFromStr = str.split('').reverse();
+    return reverseArrayFromStr.join('');
 }
 
 
