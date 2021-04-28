@@ -50,7 +50,6 @@ function getFizzBuzz(num) {
  */
 function getFactorial(n) {
     return n === 1 ? 1 : n * getFactorial(n-1);
-    throw new Error('Not implemented');
 }
 
 
@@ -67,7 +66,12 @@ function getFactorial(n) {
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
 function getSumBetweenNumbers(n1, n2) {
-    throw new Error('Not implemented');
+   /*  let sum = 0;
+    for (let i = n1; i <= n2; i++) {
+        sum += i
+    }
+    return sum; */
+    return n1 === n2 ? n1 : n1 + getSumBetweenNumbers(n1 + 1, n2);
 }
 
 
