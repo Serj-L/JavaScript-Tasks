@@ -269,7 +269,7 @@ function isCreditCardNumber(ccn) {
     const reverseCcnArr = ccnArr.map(el => el = Number(el)).reverse();
     const reverseCcnArrOdd = reverseCcnArr.filter((el, ind) => ind === 0 || !(ind % 2));
     const reverseCcnArrEven = reverseCcnArr.filter((el, ind) => ind > 0 && (ind % 2));
-    const sumReverseCcnArrOdd = reverseCcnArrOdd.reduce((acc, el) => {return acc +=el});
+    const sumReverseCcnArrOdd = reverseCcnArrOdd.reduce((acc, el) => {return acc +=el}, 0);
     const sumReverseCcnArrEven = reverseCcnArrEven.reduce((acc, el) => {return el * 2 <= 9 ? acc += el * 2 : acc += el * 2 - 9}, 0);
     return ((sumReverseCcnArrOdd + sumReverseCcnArrEven) % 10) ? false : true;
 }
@@ -290,7 +290,19 @@ function isCreditCardNumber(ccn) {
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-    throw new Error('Not implemented');
+    const arrFromNum = getArrFromNumber(num);
+    const sumOfArr = getSumOfArr(arrFromNum);
+    const arrFromSumOfArr = getArrFromNumber(sumOfArr);
+
+    function getArrFromNumber(number) {
+        return number.toString().split('').map(el => el = Number(el));
+    };
+
+    function getSumOfArr(array) {
+        return array.reduce((acc, el) => {return acc +=el}, 0);
+    };
+
+    return getSumOfArr(arrFromSumOfArr);
 }
 
 
