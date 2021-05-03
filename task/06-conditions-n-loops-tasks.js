@@ -387,7 +387,46 @@ function isBracketsBalanced(str) {
  *
  */
 function timespanToHumanString(startDate, endDate) {
-    throw new Error('Not implemented');
+    const sss = endDate - startDate;
+    const ss = sss / 1000;
+    const mm = ss / 60;
+    const hh = mm / 60;
+    const dd = hh / 24;
+    const month = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
+    const year = (endDate.getFullYear() - startDate.getFullYear())
+
+    if(ss <= 45) {
+        return 'a few seconds ago'
+    }
+    if(ss > 45 && ss <= 90) {
+        return 'a minute ago'
+    }
+    if(ss > 90 && mm <= 45) {
+        return `${Math.floor(mm) < 2 ? 2 : Math.floor(mm)} minutes ago`
+    }
+    if(mm > 45 && mm <= 90) {
+        return 'an hour ago'
+    }
+    if(mm > 90 && hh <= 22) {
+        return `${Math.floor(hh) < 2 ? 2 : ((sss / 60000) % 60) > 30 ? Math.ceil(hh) : Math.floor(hh)} hours ago`
+    }
+    if(hh > 22 && hh <= 36) {
+        return 'a day ago'
+    }
+    if(hh > 36 && dd <= 25) {
+        return `${Math.floor(dd) < 2 ? 2 : Math.floor(dd)} days ago`
+    }
+    if(dd > 25 && dd <= 45) {
+        return 'a month ago'
+    }
+    if(dd > 45 && dd <= 345) {
+        return `${month < 2 ? 2 : (hh % 30) > 15 ? month + 1 : month} months ago`
+    }
+    if(dd > 345 && dd <= 545) {
+        return 'a year ago'
+    }
+
+    return `${year < 2 ? 2 : year} years ago`;
 }
 
 
