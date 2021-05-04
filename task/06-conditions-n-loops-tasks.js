@@ -452,7 +452,7 @@ function timespanToHumanString(startDate, endDate) {
 function toNaryString(num, n) {
 
 return num.toString(n);
-    //    throw new Error('Not implemented');
+
 }
 
 
@@ -527,7 +527,44 @@ function getMatrixProduct(m1, m2) {
  *
  */
 function evaluateTicTacToePosition(position) {
-    throw new Error('Not implemented');
+
+    position.forEach(elem => {
+        if(Array.isArray(elem) === true && elem.length < 3) {
+            elem.length = 3;
+        }
+    });
+
+    let positionToFlat = position.join().split(',');
+
+    const winCombo = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
+
+    let CrossIndexes = [];
+    let ZeroIndexes = [];
+
+    positionToFlat.forEach((elem, ind) => {
+        if(elem === 'X') {CrossIndexes.push(ind)}
+        if(elem === '0') {ZeroIndexes.push(ind)}
+    });
+
+    let checkWinCross = null;
+    for (let i = 0; i < winCombo.length; i++) {
+        if (checkWinCross) break;
+        checkWinCross = winCombo[i].every(elem => CrossIndexes.includes(elem));
+    }
+
+    let checkWinZero = null;
+    for (let i = 0; i < winCombo.length; i++) {
+        if (checkWinZero) break;
+        checkWinZero = winCombo[i].every(elem => ZeroIndexes.includes(elem));
+    }
+
+    if (checkWinCross === true && checkWinZero === false) {
+        return 'X';
+    }
+    if (checkWinCross === false && checkWinZero === true) {
+        return '0';
+    }
+    return undefined;
 }
 
 
