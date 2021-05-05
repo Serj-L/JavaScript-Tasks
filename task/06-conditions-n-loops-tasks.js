@@ -469,18 +469,18 @@ return num.toString(n);
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-    let destructingPathes = pathes.join('').split('/');
-    let allRepeatingValues = destructingPathes.filter((el, ind, arr) => ind !== arr.indexOf(el) || ind !== arr.lastIndexOf(el));
-    let repeatingValuesCount = allRepeatingValues.reduce((acc, el) => (typeof acc[el] !== 'undefined') ? {...acc, [el]: acc[el] + 1} : {...acc, [el]: 1} , {});
+    const destructingPathes = pathes.join('').split('/');
+    const allRepeatingValues = destructingPathes.filter((el, ind, arr) => ind !== arr.indexOf(el) || ind !== arr.lastIndexOf(el));
+    const repeatingValuesCount = allRepeatingValues.reduce((acc, el) => (typeof acc[el] !== 'undefined') ? {...acc, [el]: acc[el] + 1} : {...acc, [el]: 1} , {});
     let repeatingValues = [];
         for (let key in repeatingValuesCount) {
             if (repeatingValuesCount[key] === pathes.length) {
                 repeatingValues.push(key)
             }
         }
-    let uniqValues = repeatingValues.reduce((acc, el) => acc.includes(el) ? acc : [...acc, el], []);
-    let commonPath = uniqValues.map((el, ind) => ind === uniqValues.length - 1 ? el = `/${el}/` : el = `/${el}`).join('').split();
-    let checkFirstChar = pathes.filter(el => el.charAt(0) === '/').length === pathes.length;
+    const uniqValues = repeatingValues.reduce((acc, el) => acc.includes(el) ? acc : [...acc, el], []);
+    const commonPath = uniqValues.map((el, ind) => ind === uniqValues.length - 1 ? el = `/${el}/` : el = `/${el}`).join('').split();
+    const checkFirstChar = pathes.filter(el => el.charAt(0) === '/').length === pathes.length;
 
     return commonPath[0] === '' && checkFirstChar === true ? '/' : commonPath.join('');
 }
