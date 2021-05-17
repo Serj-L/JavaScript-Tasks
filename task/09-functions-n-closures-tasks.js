@@ -165,7 +165,25 @@ function retry(func, attempts) {
  *
  */
 function logger(func, logFunc) {
-    throw new Error('Not implemented');
+
+    return function loggingWrapper(...args) {
+        let result;
+        let strArgs;
+
+        if (args.length > 1) {
+            strArgs = '';
+            for (let arg of args) {
+                arg[0] ? strArgs += JSON.stringify(arg) : strArgs += `,${JSON.stringify(arg)}`;
+            }
+        } else {
+            strArgs = args;
+        }
+
+        logFunc(`${func.name}(${strArgs}) starts`);
+        result = func(...args);
+        logFunc(`${func.name}(${strArgs}) ends`);
+        return result;
+    }
 }
 
 
