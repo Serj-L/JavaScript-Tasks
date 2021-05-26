@@ -17,8 +17,32 @@
  *  ]
  */
 function createCompassPoints() {
-    throw new Error('Not implemented');
-    var sides = ['N','E','S','W'];  // use array of cardinal directions only!
+    let result = [];
+
+    const compassPointsGenerator = (function* pointsGenerator() {
+        let point = 0;
+        let abbreviation = ['N','NbE','NNE','NEbN','NE', 'NEbE','ENE','EbN','E','EbS','ESE','SEbE','SE','SEbS','SSE','SbE','S','SbW','SSW','SWbS','SW','SWbW','WSW','WbS','W','WbN','WNW','NWbW','NW', 'NWbN','NNW','NbW'];
+        let currentAzimut = (function* azimutGenerator() {
+            let azimut = 0;
+            while (azimut < 350) {
+                yield azimut
+                azimut += 11.25;
+            }
+        })();
+
+        while (point < abbreviation.length) {
+            yield {abbreviation : abbreviation[point], azimuth : currentAzimut.next().value}
+            point++;
+        }
+    })();
+
+    let currentPoint = compassPointsGenerator.next();
+    while (!currentPoint.done) {
+        result.push(currentPoint.value);
+        currentPoint = compassPointsGenerator.next();
+    }
+
+    return result;
 }
 
 
