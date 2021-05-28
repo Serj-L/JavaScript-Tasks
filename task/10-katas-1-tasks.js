@@ -137,7 +137,87 @@ function getZigZagMatrix(n) {
  *
  */
 function canDominoesMakeRow(dominoes) {
-    throw new Error('Not implemented');
+    let result = [];
+    let resultReversed = [...result].reverse();
+    let restDominoes = [];
+
+    for (let i = 0; i < dominoes.length - 1; i++) {
+        let currentDominoReversed = [...dominoes[i]].reverse();
+        let nextDominoReversed = [...dominoes[i+1]].reverse();
+
+        if (!result.length) {
+            if (dominoes[i][1] === dominoes[i+1][0]) {
+                result.push(...dominoes[i],...dominoes[i+1]);
+                continue;
+            }
+            if (dominoes[i][1] === nextDominoReversed[0]) {
+                result.push(...dominoes[i], ...nextDominoReversed);
+                continue;
+            }
+            if (currentDominoReversed[1] === dominoes[i+1][0]) {
+                result.push(...currentDominoReversed, ...dominoes[i+1]);
+                continue;
+            }
+            if (currentDominoReversed[1] === nextDominoReversed[0]) {
+                result.push(...currentDominoReversed, ...nextDominoReversed);
+                continue;
+            }
+            restDominoes.push(dominoes[i+1]);
+        } else {
+            if (result[result.length-1] === dominoes[i+1][0]) {
+                result = [...result, ...dominoes[i+1]];
+                continue;
+            }
+            if (result[result.length-1] === nextDominoReversed[0]) {
+                result = [...result, ...nextDominoReversed];
+                continue;
+            }
+            if (resultReversed[result.length-1] === dominoes[i+1][0]) {
+                result = [...resultReversed, ...dominoes[i+1]];
+                continue;
+            }
+            if (resultReversed[result.length-1] === nextDominoReversed[1]) {
+                result = [...resultReversed, ...nextDominoReversed];
+                continue;
+            }
+            restDominoes.push(dominoes[i+1]);
+        }
+    }
+
+    if (restDominoes.length > 0) {
+        let counter = restDominoes.length;
+
+        while (counter > 0) {
+            let RestDominoRev = [...restDominoes[0]].reverse();
+
+            if (result[result.length-1] === restDominoes[0][0]) {
+                result = [...result, ...restDominoes[0]];
+                restDominoes.shift();
+                counter--;
+                continue;
+            }
+            if (result[result.length-1] === RestDominoRev[0]) {
+                result = [...result, ...RestDominoRev];
+                restDominoes.shift();
+                counter--;
+                continue;
+            }
+            if (resultReversed[result.length-1] === restDominoes[0][0]) {
+                result = [...resultReversed, ...restDominoes[0]];
+                restDominoes.shift();
+                counter--;
+                continue;
+            }
+            if (resultReversed[result.length-1] === RestDominoRev[0]) {
+                result = [...resultReversed, ...RestDominoRev];
+                restDominoes.shift();
+                counter--;
+                continue;
+            }
+            counter--;
+        }
+    }
+    return restDominoes.length === 0 ? true : false;
 }
 
 
@@ -167,17 +247,7 @@ function extractRanges(nums) {
         } else {
             return num = '-';
         }
-    }).map((num, ind, arr) => {
-        if (num !== '-') {
-            return num;
-        } else {
-            if (arr[ind+1] === '-') {
-                return num = '+';
-            } else {
-                return num;
-            }
-        }
-    }).filter(num => num !== '+');
+    }).filter((num, ind, arr) => (num === '-' && arr[ind+1] !== '-') || num !== '-');
 
     return result.join(',').replace(/,-,/g, '-');
 }
