@@ -112,7 +112,96 @@ function* expandBraces(str) {
  *
  */
 function getZigZagMatrix(n) {
-    throw new Error('Not implemented');
+    let result = new Array(n).fill(0).map(el => new Array(n).fill(0));
+
+    if (n > 1) {
+        let currentPosition = {x: 0, y: 0};
+        let canStepLeft = true;
+        let canStepDown;
+        let canStepDiagonalDown;
+        let canStepDiagonalUp;
+        let counter = 0;
+
+        function stepLeft(currentPosition) {
+            if (canStepLeft) {
+                ++counter;
+                currentPosition.y += 1;
+                result[currentPosition.x][currentPosition.y] = counter;
+                canStepLeft = false;
+                result[currentPosition.x + 1] && result[currentPosition.x + 1][currentPosition.y - 1] !== undefined ? canStepDiagonalDown = true : canStepDiagonalDown = false;
+                !canStepDiagonalDown && (result[currentPosition.x - 1] && result[currentPosition.x - 1][currentPosition.y + 1] !== undefined) ? canStepDiagonalUp = true : canStepDiagonalUp = false;
+                return;
+            } else {
+                return;
+            }
+        }
+
+        function stepDown(currentPosition) {
+            if (canStepDown) {
+                ++counter;
+                currentPosition.x += 1;
+                result[currentPosition.x][currentPosition.y] = counter;
+                canStepDown = false;
+                result[currentPosition.x - 1] && result[currentPosition.x - 1][currentPosition.y + 1] !== undefined ? canStepDiagonalUp = true : canStepDiagonalUp = false;
+                !canStepDiagonalUp && (result[currentPosition.x + 1] && result[currentPosition.x + 1][currentPosition.y - 1] !== undefined) ? canStepDiagonalDown = true : canStepDiagonalDown = false;
+                return;
+            } else {
+                return;
+            }
+        }
+
+        function stepDiagonalDown(currentPosition) {
+            if (!result[currentPosition.x + 1] || result[currentPosition.x + 1][currentPosition.y - 1] === undefined) {
+                result[currentPosition.x + 1] && result[currentPosition.x + 1][currentPosition.y] !== undefined ? canStepDown = true : canStepDown = false;
+                !canStepDown && (result[currentPosition.x] && result[currentPosition.x][currentPosition.y + 1] !== undefined) ? canStepLeft = true : canStepLeft = false;
+                canStepDiagonalDown = false;
+                return;
+            } else {
+                ++counter;
+                currentPosition.x += 1;
+                currentPosition.y -= 1;
+                result[currentPosition.x][currentPosition.y] = counter;
+                stepDiagonalDown(currentPosition);
+            }
+        }
+
+        function stepDiagonalUp(currentPosition) {
+            if (!result[currentPosition.x - 1] || result[currentPosition.x - 1][currentPosition.y + 1] === undefined) {
+                result[currentPosition.x] && result[currentPosition.x][currentPosition.y + 1] !== undefined ? canStepLeft = true : canStepLeft = false;
+                !canStepLeft && (result[currentPosition.x + 1] && result[currentPosition.x + 1][currentPosition.y] !== undefined) ? canStepDown = true : canStepDown = false;
+                canStepDiagonalUp = false;
+                return;
+            } else {
+                ++counter;
+                currentPosition.x -= 1;
+                currentPosition.y += 1;
+                result[currentPosition.x][currentPosition.y] = counter;
+                stepDiagonalUp(currentPosition);
+            }
+        }
+
+        while ( counter < n * n ) {
+           if (canStepLeft) {
+            stepLeft(currentPosition);
+            continue;
+           }
+           if (canStepDiagonalDown) {
+            stepDiagonalDown(currentPosition);
+            continue;
+           }
+           if (canStepDown) {
+            stepDown(currentPosition);
+            continue;
+           }
+           if (canStepDiagonalUp) {
+            stepDiagonalUp(currentPosition);
+            continue;
+           }
+           break;
+        }
+    }
+
+    return result;
 }
 
 
@@ -137,84 +226,71 @@ function getZigZagMatrix(n) {
  *
  */
 function canDominoesMakeRow(dominoes) {
-    let result = [];
-    let resultReversed = [...result].reverse();
     let restDominoes = [];
-
-    for (let i = 0; i < dominoes.length - 1; i++) {
-        let currentDominoReversed = [...dominoes[i]].reverse();
-        let nextDominoReversed = [...dominoes[i+1]].reverse();
-
-        if (!result.length) {
-            if (dominoes[i][1] === dominoes[i+1][0]) {
-                result.push(...dominoes[i],...dominoes[i+1]);
-                continue;
-            }
-            if (dominoes[i][1] === nextDominoReversed[0]) {
-                result.push(...dominoes[i], ...nextDominoReversed);
-                continue;
-            }
-            if (currentDominoReversed[1] === dominoes[i+1][0]) {
-                result.push(...currentDominoReversed, ...dominoes[i+1]);
-                continue;
-            }
-            if (currentDominoReversed[1] === nextDominoReversed[0]) {
-                result.push(...currentDominoReversed, ...nextDominoReversed);
-                continue;
-            }
-            restDominoes.push(dominoes[i+1]);
+    let sortedDominoes = dominoes
+    .map(domino => domino[0] > domino[1] ? domino.reverse() : domino)
+    .sort((a, b) => a[0] - b[0]);
+    let rowDominoes = sortedDominoes.reduce((acc, domino, ind) => {
+        if (ind === 0) {
+            acc.push(domino);
+            return acc;
         } else {
-            if (result[result.length-1] === dominoes[i+1][0]) {
-                result = [...result, ...dominoes[i+1]];
-                continue;
+            if (acc[0][0] === domino[0]) {
+                domino.reverse();
+                return acc = [domino, ...acc];
             }
-            if (result[result.length-1] === nextDominoReversed[0]) {
-                result = [...result, ...nextDominoReversed];
-                continue;
+            if (acc[0][0] === domino[1]) {
+                return acc = [domino, ...acc];
             }
-            if (resultReversed[result.length-1] === dominoes[i+1][0]) {
-                result = [...resultReversed, ...dominoes[i+1]];
-                continue;
+            if (acc[acc.length-1][1] === domino[0]) {
+                return acc = [...acc, domino];
             }
-            if (resultReversed[result.length-1] === nextDominoReversed[1]) {
-                result = [...resultReversed, ...nextDominoReversed];
-                continue;
+            if (acc[acc.length-1][1] === domino[1]) {
+                domino.reverse();
+                return acc = [...acc, domino];
             }
-            restDominoes.push(dominoes[i+1]);
+            restDominoes.push(domino);
+            return acc;
         }
-    }
+    }, []);
 
-    if (restDominoes.length > 0) {
-        let counter = restDominoes.length;
+    if (restDominoes.length > 0 && dominoes.length > 2) {
+        let checkedRestDominoes = false;
 
-        while (counter > 0) {
-            let RestDominoRev = [...restDominoes[0]].reverse();
+        while (!checkedRestDominoes && restDominoes.length) {
+            let conditionsPassed = false;
 
-            if (result[result.length-1] === restDominoes[0][0]) {
-                result = [...result, ...restDominoes[0]];
-                restDominoes.shift();
-                counter--;
-                continue;
-            }
-            if (result[result.length-1] === RestDominoRev[0]) {
-                result = [...result, ...RestDominoRev];
-                restDominoes.shift();
-                counter--;
-                continue;
-            }
-            if (resultReversed[result.length-1] === restDominoes[0][0]) {
-                result = [...resultReversed, ...restDominoes[0]];
-                restDominoes.shift();
-                counter--;
-                continue;
-            }
-            if (resultReversed[result.length-1] === RestDominoRev[0]) {
-                result = [...resultReversed, ...RestDominoRev];
-                restDominoes.shift();
-                counter--;
-                continue;
-            }
-            counter--;
+            restDominoes.forEach((domino, ind, arr) => {
+                let restDominoRev = [...domino].reverse();
+
+                if (rowDominoes[0][0] === domino[0]) {
+                    rowDominoes = [restDominoRev, ...rowDominoes];
+                    arr[ind] = 0;
+                    conditionsPassed = true;
+                    return;
+                }
+                if (rowDominoes[0][0] === domino[1]) {
+                    rowDominoes = [domino, ...rowDominoes];
+                    arr[ind] = 0;
+                    conditionsPassed = true;
+                    return;
+                }
+                if (rowDominoes[rowDominoes.length-1][1] === domino[0]) {
+                    rowDominoes = [...rowDominoes, domino];
+                    arr[ind] = 0;
+                    conditionsPassed = true;
+                    return;
+                }
+                if (rowDominoes[rowDominoes.length-1][1] === domino[1]) {
+                    rowDominoes = [...rowDominoes, restDominoRev];
+                    arr[ind] = 0;
+                    conditionsPassed = true;
+                    return;
+                } else {
+                   !conditionsPassed && ind === arr.length - 1 ? checkedRestDominoes = true : checkedRestDominoes = false;
+                }
+            });
+            restDominoes = restDominoes.filter(domino => domino !== 0);
         }
     }
     return restDominoes.length === 0 ? true : false;
