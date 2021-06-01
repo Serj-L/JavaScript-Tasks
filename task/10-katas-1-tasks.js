@@ -80,7 +80,77 @@ function createCompassPoints() {
  *   'nothing to do' => 'nothing to do'
  */
 function* expandBraces(str) {
-    throw new Error('Not implemented');
+    if (str.includes('{') && str.includes('}') && str.includes(',')) {
+        const stack = [];
+        let i = 0;
+
+        function getCombaineItems(a, b) {
+            if (a.length === 0) {
+                return b;
+            }
+            if (b.length === 0) {
+                return a;
+            }
+            const combaineItems = [];
+
+            for (let i = 0; i < a.length; i++) {
+                for (let j = 0; j < b.length; j++) {
+                    combaineItems.push(a[i] + b[j]);
+                }
+            }
+            return combaineItems;
+        }
+
+        while (i < str.length) {
+            if (str[i] === '}') {
+                let prevItem = [];
+                let currentItem = stack.pop();
+
+                while (currentItem !== '{') {
+                    if (Array.isArray(currentItem)) {
+                        prevItem = getCombaineItems(currentItem, prevItem);
+                    } else if (currentItem === ',') {
+                        prevItem = stack.pop().concat(prevItem);
+                    }
+                    currentItem = stack.pop();
+                }
+
+                while (Array.isArray(stack[stack.length - 1])) {
+                    const lastItem = stack.pop();
+                    prevItem = getCombaineItems(lastItem, prevItem);
+                }
+                stack.push(prevItem);
+            } else {
+                if (str[i] === '{' || str[i] === ',') {
+                    if (str[i] === ',' && str[i+1] === '}') {
+                        stack.push(str[i], ['']);
+                        i++;
+                        continue;
+                    }
+                    if (str[i] === ',' && str[i+1] === ' ') {
+                        stack.push([str[i]]);
+                        i++;
+                        continue;
+                    }
+                    stack.push(str[i]);
+                } else {
+                    stack.push([str[i]]);
+                    while (stack.length > 1 && stack[stack.length - 2] !== '{' && stack[stack.length - 2] !== ',') {
+                        const currentItem = stack.pop();
+                        const beforeCurrentItem = stack.pop();
+                        stack.push(getCombaineItems(beforeCurrentItem, currentItem));
+                    }
+                }
+            }
+            i++;
+        }
+
+        for (let i = 0; i < stack[0].length; i++) {
+            yield stack[0][i]
+        };
+    } else {
+        yield str
+    }
 }
 
 
