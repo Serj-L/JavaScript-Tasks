@@ -33,9 +33,76 @@
  *   '|_||_  _||_| _||_| _||_| _|\n',
  *
  */
-function parseBankAccount(bankAccount) {
-    throw new Error('Not implemented');
-}
+    function parseBankAccount(bankAccount) {
+        const digitSize = {x: 3, y: 3};
+        const rowLength = bankAccount.length / digitSize.y;
+        const startPoint1Raw = 0;
+        const startPoint2Raw = rowLength;
+        const startPoint3Raw = startPoint2Raw * 2;
+        const analizeStepLenght = digitSize.x;
+
+        let result = '';
+        let currentStartPoint1Raw = startPoint1Raw;
+        let currentStartPoint2Raw = startPoint2Raw;
+        let currentStartPoint3Raw = startPoint3Raw;
+
+        for (let i = 1; i <= rowLength / analizeStepLenght; i++) {
+            let analizeString = '';
+
+            for (let j = 1; j <= rowLength / analizeStepLenght; j++) {
+                if (j <= analizeStepLenght) {
+                    analizeString += bankAccount[currentStartPoint1Raw];
+                    currentStartPoint1Raw++;
+                    continue;
+                }
+                if (j > analizeStepLenght && j <= analizeStepLenght * 2) {
+                    analizeString += bankAccount[currentStartPoint2Raw];
+                    currentStartPoint2Raw++;
+                    continue;
+                }
+                if (j > analizeStepLenght && j <= analizeStepLenght * 3) {
+                    analizeString += bankAccount[currentStartPoint3Raw];
+                    currentStartPoint3Raw++;
+                    continue;
+                }
+            break;
+            }
+
+            switch(analizeString) {
+                case ' _ | ||_|':
+                    result += 0;
+                break;
+                case '     |  |':
+                    result += 1;
+                break;
+                case ' _  _||_ ':
+                    result += 2;
+                break;
+                case ' _  _| _|':
+                    result += 3;
+                break;
+                case '   |_|  |':
+                    result += 4;
+                break;
+                case ' _ |_  _|':
+                    result += 5;
+                break;
+                case ' _ |_ |_|':
+                    result += 6;
+                break;
+                case ' _   |  |':
+                    result += 7;
+                break;
+                case ' _ |_||_|':
+                    result += 8;
+                break;
+                case ' _ |_| _|':
+                    result += 9;
+                break;
+            }
+        }
+        return +result;
+    }
 
 
 /**
@@ -110,10 +177,10 @@ function getPokerHandRank(hand) {
  * The task is to break the figure in the rectangles it is made of.
  *
  * NOTE: The order of rectanles does not matter.
- * 
+ *
  * @param {string} figure
  * @return {Iterable.<string>} decomposition to basic parts
- * 
+ *
  * @example
  *
  *    '+------------+\n'+
