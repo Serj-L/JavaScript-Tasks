@@ -130,7 +130,39 @@
  *                                                                                                'characters.'
  */
 function* wrapText(text, columns) {
-    throw new Error('Not implemented');
+
+    if (columns > text.length - 1) {
+        yield text
+    } else {
+        let startPoint = 0;
+        let analizePoint = columns - 1;
+        let endPointCounter = 0;
+        let result = [];
+
+        function changePoints() {
+            analizePoint + 1 <= text.length - 1 ? startPoint = analizePoint + 1 : startPoint = analizePoint;
+            startPoint + columns <= text.length - 1 ? analizePoint = startPoint + columns : analizePoint = text.length - 1;
+            if (analizePoint === text.length - 1) endPointCounter++;
+        }
+
+        while (endPointCounter <= 1) {
+            if (text[analizePoint] === ' ' || analizePoint === text.length - 1) {
+                result.push(text.slice(startPoint, analizePoint + 1).trim());
+                changePoints()
+                continue;
+            } else {
+                while(text[analizePoint] !== ' ') {
+                    analizePoint--;
+                }
+                result.push(text.slice(startPoint, analizePoint + 1).trim());
+                changePoints()
+            }
+        }
+
+        for (let i = 0; i < result.length; i++) {
+            yield result[i]
+        }
+    }
 }
 
 
