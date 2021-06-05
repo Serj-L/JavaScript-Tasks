@@ -148,14 +148,13 @@ function* wrapText(text, columns) {
         while (endPointCounter <= 1) {
             if (text[analizePoint] === ' ' || analizePoint === text.length - 1) {
                 result.push(text.slice(startPoint, analizePoint + 1).trim());
-                changePoints()
-                continue;
+                changePoints();
             } else {
                 while(text[analizePoint] !== ' ') {
                     analizePoint--;
                 }
                 result.push(text.slice(startPoint, analizePoint + 1).trim());
-                changePoints()
+                changePoints();
             }
         }
 
@@ -199,7 +198,82 @@ const PokerRank = {
 }
 
 function getPokerHandRank(hand) {
-    throw new Error('Not implemented');
+    const ranks = [];
+    const suits = [];
+    hand.forEach(card => {
+        ranks.push(card.substring(0, card.length -1));
+        suits.push(card.slice(-1));
+    })
+    const ranksRepeats = ranks.reduce((acc, rank) => {
+        acc[rank] = (acc[rank] || 0) + 1;
+        return acc;
+        }, {});
+    const suitsRepeats = suits.reduce((acc, suit) => {
+        acc[suit] = (acc[suit] || 0) + 1;
+        return acc;
+        }, {});
+    const sortedRanksRepeats = Object.keys(ranksRepeats).sort((a, b) => {
+        if (!isNaN(a) && !isNaN(b)) {
+            return Number(b) - Number(a);
+        }
+        if (isNaN(a) && isNaN(b)) {
+            return a.toUpperCase() === 'J' ? 1 : a.toUpperCase() < b.toUpperCase() ? -1 : 1;
+        }
+        if (!isNaN(a)) return 1;
+        if (isNaN(a)) return -1;
+        return -1;
+    });
+
+    let counter = 1;
+    for (let i = 1; i < sortedRanksRepeats.length; i++) {
+        if (isNaN(sortedRanksRepeats[i-1]) && isNaN(sortedRanksRepeats[i])) {
+            if ((sortedRanksRepeats[i-1].toUpperCase() === 'A' && sortedRanksRepeats[i].toUpperCase() === 'K')
+            || (sortedRanksRepeats[i-1].toUpperCase() === 'K' && sortedRanksRepeats[i].toUpperCase() === 'Q')
+            || (sortedRanksRepeats[i-1].toUpperCase() === 'Q' && sortedRanksRepeats[i].toUpperCase() === 'J')) {
+                counter++;
+                continue;
+            } else {
+                break;
+            }
+        }
+        if (isNaN(sortedRanksRepeats[i-1]) && !isNaN(sortedRanksRepeats[i])) {
+            if ((sortedRanksRepeats[i-1].toUpperCase() === 'J' && Number(sortedRanksRepeats[i]) === 10)
+            || (sortedRanksRepeats[i-1].toUpperCase() === 'A' && Number(sortedRanksRepeats[i]) === 5)) {
+                counter++;
+                continue;
+            } else {
+                break;
+            }
+        }
+        if (!isNaN(sortedRanksRepeats[i-1]) && !isNaN(sortedRanksRepeats[i])) {
+            if ((Number(sortedRanksRepeats[i-1]) - Number(sortedRanksRepeats[i])) === 1) {
+                counter++;
+                continue;
+            } else {
+                break;
+            }
+        }
+    }
+
+    const isRanksArranged = counter === 5 ? true : false;
+
+    if (isRanksArranged) {
+        return Object.keys(suitsRepeats).length === 1 ? PokerRank.StraightFlush : PokerRank.Straight;
+    }
+
+    if (Object.values(ranksRepeats).filter(rep => rep === 4).length === 1) return PokerRank.FourOfKind;
+
+    if (Object.values(ranksRepeats).filter(rep => rep === 3).length === 1) {
+        return Object.values(ranksRepeats).filter(rep => rep === 2).length === 1 ? PokerRank.FullHouse : PokerRank.ThreeOfKind;
+    }
+
+    if (Object.keys(suitsRepeats).length === 1) return PokerRank.Flush;
+
+    if (Object.values(ranksRepeats).filter(rep => rep === 2).length > 0) {
+        return Object.values(ranksRepeats).filter(rep => rep === 2).length === 2 ? PokerRank.TwoPairs : PokerRank.OnePair;
+    }
+
+    return PokerRank.HighCard;
 }
 
 
