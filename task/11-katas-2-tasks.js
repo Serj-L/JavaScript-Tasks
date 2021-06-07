@@ -308,7 +308,134 @@ function getPokerHandRank(hand) {
  *    '+-------------+\n'
  */
 function* getFigureRectangles(figure) {
-   throw new Error('Not implemented');
+    const trimFigure = figure.replace(/\n/g, '')
+    const result = [];
+    const subEndPoints = [];
+    let startPos = 0;
+    let endPos = 0;
+    let rowsQuant = 1;
+    let isNextRect = true;
+    let isOneRectangle = true;
+    let nextSymb = null;
+    let nextSymbCounter = 0;
+
+    function getStringRect (start, end, rows) {
+        return `+${'-'.repeat(end - start - 1)}+\n` + `|${' '.repeat(end - start - 1)}|\n`.repeat(rows) + `+${'-'.repeat(end - start - 1)}+\n`
+    }
+
+    function getStringFlatRect (start, end, rows) {
+        return `+${'-'.repeat(end - start - 1)}+\n`.repeat(rows)
+    }
+
+    if (trimFigure.includes('|')) {
+        for (let i = 0; i < trimFigure.length; i++) {
+
+            if (trimFigure[i] === '+' || trimFigure[i] === '-' || trimFigure[i] === ' ') {
+                continue;
+            }
+
+            if (trimFigure[i+1] === ' ' && nextSymbCounter < i + 1) {
+                nextSymbCounter = i + 1;
+                while (trimFigure[nextSymbCounter] === ' ') {
+                    nextSymbCounter++;
+                    if (trimFigure[nextSymbCounter] !== ' ') nextSymb = trimFigure[nextSymbCounter];
+                }
+            }
+
+            if ((trimFigure[i] === '|' && trimFigure[i-1] === '+') || (trimFigure[i] === '|' && !startPos) ) {
+                startPos = i;
+                continue;
+            }
+            if (trimFigure[i] === '|' && trimFigure[i-1] === ' ' && trimFigure[i+1] === ' ' && isNextRect && startPos && nextSymb === '|') {
+                isOneRectangle = false;
+                subEndPoints.push(i);
+                continue;
+            }
+            if (trimFigure[i] === '|' && trimFigure[i+1] === '|') {
+                if(!endPos) endPos = i;
+                rowsQuant++;
+                isNextRect = false;
+                continue;
+            }
+            if ((trimFigure[i] === '|' && trimFigure[i+1] === '+') || (trimFigure[i] === '|' && nextSymb === '+')) {
+                if(!endPos) endPos = i;
+                if (isOneRectangle) {
+                    result.push(getStringRect(startPos, endPos, rowsQuant));
+                }
+                if (!isOneRectangle) {
+                    if(subEndPoints.length > 1) {
+                        subEndPoints.forEach((el, ind, arr) => {
+                            if (ind === 0) {
+                                result.push(getStringRect(startPos, el, rowsQuant));
+                                return;
+                            }
+                            if (ind === subEndPoints.length - 1) {
+                                result.push(getStringRect(arr[ind-1], el, rowsQuant))
+                                result.push(getStringRect(el, endPos, rowsQuant));
+                                return;
+                            }
+                                result.push(getStringRect(arr[ind-1], el, rowsQuant));
+                                return;
+                        });
+                    } else {
+                        result.push(getStringRect(startPos, subEndPoints[0], rowsQuant));
+                        result.push(getStringRect(subEndPoints[0], endPos, rowsQuant));
+                    }
+                }
+                startPos = 0;
+                endPos = 0;
+                rowsQuant = 1;
+                isNextRect = true;
+                isOneRectangle = true;
+                subEndPoints.length = 0;
+                continue;
+            }
+        }
+    } else {
+        for (let i = 0; i < figure.length; i++) {
+            if (figure[i] === '+' && figure[i-1] === undefined) {
+                startPos = i;
+                continue;
+            }
+            if (figure[i] === '+' && (figure[i-1] === '-' || figure[i-1] === '+') && (figure[i+1] === '-' || figure[i+1] === '+')) {
+                isOneRectangle = false;
+                subEndPoints.push(i);
+                continue;
+            }
+            if (figure[i] === '+' && figure[i+1] === '\n') {
+                endPos = i;
+                rowsQuant++;
+                if (isOneRectangle) {
+                    result.push(getStringFlatRect(startPos, endPos, rowsQuant));
+                }
+                if (!isOneRectangle) {
+                    if(subEndPoints.length > 1) {
+                        subEndPoints.forEach((el, ind, arr) => {
+                            if (ind === 0) {
+                                result.push(getStringFlatRect(startPos, el, rowsQuant));
+                                return;
+                            }
+                            if (ind === subEndPoints.length - 1) {
+                                result.push(getStringFlatRect(arr[ind-1], el, rowsQuant));
+                                result.push(getStringFlatRect(el, endPos, rowsQuant));
+                                return;
+                            }
+                                result.push(getStringFlatRect(arr[ind-1], el, rowsQuant));
+                                return;
+                        });
+                    } else {
+                        result.push(getStringFlatRect(startPos, subEndPoints[0], rowsQuant));
+                        result.push(getStringFlatRect(subEndPoints[0], endPos, rowsQuant));
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+    for (let i = 0; i < result.length; i++) {
+        yield result[i]
+    }
 }
 
 
