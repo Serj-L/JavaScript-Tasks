@@ -10,13 +10,13 @@
  * @return {bool}
  *
  * @example
- *   var puzzle = [ 
+ *   var puzzle = [
  *      'ANGULAR',
  *      'REDNCAE',
  *      'RFIDTCL',
  *      'AGNEGSA',
  *      'YTIRTSP',
- *   ]; 
+ *   ];
  *   'ANGULAR'   => true   (first row)
  *   'REACT'     => true   (starting from the top-right R adn follow the ↓ ← ← ↓ )
  *   'UNDEFINED' => true
@@ -25,10 +25,98 @@
  *   'CLASS'     => true
  *   'ARRAY'     => true   (first column)
  *   'FUNCTION'  => false
- *   'NULL'      => false 
+ *   'NULL'      => false
  */
 function findStringInSnakingPuzzle(puzzle, searchStr) {
-    throw new Error('Not implemented');
+    const analizePuzz = [...puzzle];
+    const rowsLength = puzzle.length;
+    const currPosition = {r: 0, c: 0};
+    let counter = null;
+    let indexOfSearchingSymb = 0;
+    let isConditionsChecked = false;
+
+    function snakeFindSymb (arr, currPosition, indexOfSearchingSymb) {
+        if (!isConditionsChecked && arr[currPosition.r][currPosition.c-1] && arr[currPosition.r][currPosition.c-1] === searchStr[indexOfSearchingSymb].toUpperCase()) {
+            counter++;
+            indexOfSearchingSymb++;
+            currPosition.c--;
+            replaceSymb(arr, currPosition.r, currPosition.c);
+            isConditionsChecked = true;
+        }
+        if (!isConditionsChecked && arr[currPosition.r][currPosition.c+1] && arr[currPosition.r][currPosition.c+1] === searchStr[indexOfSearchingSymb].toUpperCase()) {
+            counter++;
+            indexOfSearchingSymb++;
+            currPosition.c++;
+            replaceSymb(arr, currPosition.r, currPosition.c);
+            isConditionsChecked = true;
+        }
+        if (!isConditionsChecked && arr[currPosition.r-1] && arr[currPosition.r-1][currPosition.c] && arr[currPosition.r-1][currPosition.c] === searchStr[indexOfSearchingSymb].toUpperCase()) {
+            counter++;
+            indexOfSearchingSymb++;
+            currPosition.r--;
+            replaceSymb(arr, currPosition.r, currPosition.c);
+            isConditionsChecked = true;
+        }
+        if (!isConditionsChecked && arr[currPosition.r+1] && arr[currPosition.r+1][currPosition.c] && arr[currPosition.r+1][currPosition.c] === searchStr[indexOfSearchingSymb].toUpperCase()) {
+            counter++;
+            indexOfSearchingSymb++;
+            currPosition.r++;
+            replaceSymb(arr, currPosition.r, currPosition.c);
+            isConditionsChecked = true;
+        }
+
+        if (!isConditionsChecked || (indexOfSearchingSymb === searchStr.length)) {
+            return;
+        } else {
+            isConditionsChecked = false;
+            snakeFindSymb(arr, currPosition, indexOfSearchingSymb)
+        }
+    }
+
+    function replaceSymb (arr, r, c, replacer = '-') {
+        arr[r] = arr[r].split('');
+        arr[r][c] = replacer;
+        arr[r] = arr[r].join('');
+    }
+
+    for (let r = 0; r < rowsLength; r++) {
+        let colsLength = puzzle[r].length;
+        if (counter < searchStr.length) {
+            if (counter) {
+                counter = 0;
+                indexOfSearchingSymb = 0;
+                analizePuzz.length = 0;
+                analizePuzz.push(...puzzle);
+            }
+            for (let c = 0; c < colsLength; c++) {
+                if (counter < searchStr.length) {
+                    if (counter) {
+                        counter = 0;
+                        indexOfSearchingSymb = 0;
+                        analizePuzz.length = 0;
+                        analizePuzz.push(...puzzle);
+                    }
+                    if (analizePuzz[r][c] === searchStr[indexOfSearchingSymb].toUpperCase()) {
+                        replaceSymb(analizePuzz, r, c);
+                        counter++;
+                        indexOfSearchingSymb++;
+                        currPosition.r = r;
+                        currPosition.c = c;
+                        snakeFindSymb (analizePuzz, currPosition, indexOfSearchingSymb);
+                    }
+                } else {
+                    break;
+                }
+                continue;
+            }
+        } else {
+            break;
+        }
+        continue;
+    }
+
+    return counter === searchStr.length ? true : false;
+
 }
 
 
@@ -36,7 +124,7 @@ function findStringInSnakingPuzzle(puzzle, searchStr) {
  * Returns all permutations of the specified string.
  * Assume all chars in the specified string are different.
  * The order of permutations does not matter.
- * 
+ *
  * @param {string} chars
  * @return {Iterable.<string>} all posible strings constructed with the chars from the specfied string
  *
@@ -53,9 +141,9 @@ function* getPermutations(chars) {
  * Returns the most profit from stock quotes.
  * Stock quotes are stores in an array in order of date.
  * The stock profit is the difference in prices in buying and selling stock.
- * Each day, you can either buy one unit of stock, sell any number of stock units you have already bought, or do nothing. 
+ * Each day, you can either buy one unit of stock, sell any number of stock units you have already bought, or do nothing.
  * Therefore, the most profit is the maximum difference of all pairs in a sequence of stock prices.
- * 
+ *
  * @param {array} quotes
  * @return {number} max profit
  *
@@ -73,15 +161,15 @@ function getMostProfitFromStockQuotes(quotes) {
  * Class representing the url shorting helper.
  * Feel free to implement any algorithm, but do not store link in the key\value stores.
  * The short link can be at least 1.5 times shorter than the original url.
- * 
+ *
  * @class
  *
  * @example
- *    
+ *
  *     var urlShortener = new UrlShortener();
  *     var shortLink = urlShortener.encode('https://en.wikipedia.org/wiki/URL_shortening');
  *     var original  = urlShortener.decode(shortLink); // => 'https://en.wikipedia.org/wiki/URL_shortening'
- * 
+ *
  */
 function UrlShortener() {
     this.urlAllowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"+
@@ -94,10 +182,10 @@ UrlShortener.prototype = {
     encode: function(url) {
         throw new Error('Not implemented');
     },
-    
+
     decode: function(code) {
         throw new Error('Not implemented');
-    } 
+    }
 }
 
 
