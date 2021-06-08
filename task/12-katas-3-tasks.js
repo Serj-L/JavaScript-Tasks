@@ -133,7 +133,28 @@ function findStringInSnakingPuzzle(puzzle, searchStr) {
  *    'abc' => 'abc','acb','bac','bca','cab','cba'
  */
 function* getPermutations(chars) {
-    throw new Error('Not implemented');
+    const charsArr = chars.split('');
+    const result = [charsArr.join('')];
+    const acc = new Array(charsArr.length).fill(0);
+    let i = 1;
+    let j = null;
+
+    while (i < charsArr.length) {
+        if (acc[i] < i) {
+            j = i % 2 && acc[i];
+            [charsArr[i], charsArr[j]] = [charsArr[j], charsArr[i]]
+            ++acc[i];
+            i = 1;
+            result.push(charsArr.join(''));
+        } else {
+            acc[i] = 0;
+            ++i;
+        }
+    }
+
+    for (let i = 0; i < result.length; i++) {
+        yield result[i]
+    }
 }
 
 
