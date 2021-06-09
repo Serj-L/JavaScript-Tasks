@@ -174,7 +174,43 @@ function* getPermutations(chars) {
  *    [ 1, 6, 5, 10, 8, 7 ] => 18  (buy at 1,6,5 and sell all at 10)
  */
 function getMostProfitFromStockQuotes(quotes) {
-    throw new Error('Not implemented');
+    const sortQuotes = [...quotes].sort((a, b) => {
+        return a - b;
+    });
+    let profit = 0;
+
+    function getProfit (quotes, maxValue) {
+        let indOfMaxValue = quotes.indexOf(maxValue);
+
+        if (quotes.length === 0 || indOfMaxValue === 0) {
+            return;
+        }
+        if (indOfMaxValue > quotes.length - 3) {
+            quotes.slice(0, indOfMaxValue).forEach(el => {
+                profit = profit + maxValue - el;
+            });
+            return;
+        }
+
+        if (indOfMaxValue === -1 && sortQuotes.length > 0) {
+            maxValue = sortQuotes.pop();
+            getProfit(quotes, maxValue);
+        }
+        if (indOfMaxValue !== -1) {
+            let quotesBeforeMaxValue = quotes.slice(0, indOfMaxValue);
+            let quotesAfterMaxValue = quotes.slice(indOfMaxValue + 1);
+            quotesBeforeMaxValue.forEach(el => {
+                profit = profit + maxValue - el;
+            });
+            maxValue = sortQuotes.pop();
+            getProfit(quotesAfterMaxValue, maxValue);
+        }
+
+    }
+
+    getProfit(quotes, sortQuotes.pop());
+
+    return profit;
 }
 
 

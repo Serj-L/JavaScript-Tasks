@@ -7,7 +7,7 @@ it.optional = require('../extensions/it-optional');
 describe('12-katas-3-tasks', function() {
 
     it.optional('findStringInSnakingPuzzle shoud return true if word occurrs in the specified puzzle', () => {
-        var puzzle = [ 
+        var puzzle = [
             'ANGULAR',
             'REDNCAE',
             'RFIDTCL',
@@ -48,10 +48,10 @@ describe('12-katas-3-tasks', function() {
                 expected: [ 'abc', 'acb', 'bac', 'bca', 'cab', 'cba' ]
             },{
                 chars:    'abcd',
-                expected: [ 
-                    'abcd', 'abdc', 'acbd', 'acdb', 'adbc', 'adcb', 
-                    'bacd', 'badc', 'bcad', 'bcda', 'bdac', 'bdca', 
-                    'cabd', 'cadb', 'cbad', 'cbda', 'cdab', 'cdba', 
+                expected: [
+                    'abcd', 'abdc', 'acbd', 'acdb', 'adbc', 'adcb',
+                    'bacd', 'badc', 'bcad', 'bcda', 'bdac', 'bdca',
+                    'cabd', 'cadb', 'cbad', 'cbda', 'cdab', 'cdba',
                     'dabc', 'dacb', 'dbac', 'dbca', 'dcab', 'dcba'
                 ]
             }
