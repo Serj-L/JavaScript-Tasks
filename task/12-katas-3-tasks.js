@@ -232,16 +232,55 @@ function UrlShortener() {
     this.urlAllowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"+
                            "abcdefghijklmnopqrstuvwxyz"+
                            "0123456789-_.~!*'();:@&=+$,/?#[]";
+    this.db = new Map();
 }
 
 UrlShortener.prototype = {
 
     encode: function(url) {
-        throw new Error('Not implemented');
+        const urlObj = new URL(url);
+        const origin = urlObj.origin;
+        const rest = url.replace(origin, '');
+        const setOfChars = this.urlAllowedChars.slice(0, this.urlAllowedChars.indexOf('-'));
+        let generatedCode = null;
+
+        function getCode(setOfChars, length = 6) {
+            let result = '';
+            const maxPosition = setOfChars.length - 1;
+                for(let i = 0; i < length; i++) {
+                    let currPosition = Math.floor(Math.random() * maxPosition);
+                    result = result + setOfChars.substring(currPosition, currPosition + 1);
+                }
+            return result;
+        }
+
+        this.db.forEach((value, key) => {
+            if (value === rest) {
+                generatedCode = key;
+                return;
+            }
+          });
+
+        if (!generatedCode) {
+            let newCode = getCode(setOfChars);
+            this.db.set(newCode, rest);
+            return `${origin}/${newCode}`;
+        } else {
+            return `${origin}/${generatedCode}`;
+        }
     },
 
     decode: function(code) {
-        throw new Error('Not implemented');
+        const urlObj = new URL(code);
+        const origin = urlObj.origin;
+        const generatedCode = urlObj.pathname.replace('/', '');
+
+        if (this.db.get(generatedCode)) {
+            return origin + this.db.get(generatedCode);
+        } else {
+            alert('Invalid URL');
+            console.log('Invalid URL');
+        }
     }
 }
 
