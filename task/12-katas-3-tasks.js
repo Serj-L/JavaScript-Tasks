@@ -241,7 +241,6 @@ UrlShortener.prototype = {
         const urlObj = new URL(url);
         const origin = urlObj.origin;
         const rest = url.replace(origin, '');
-        const setOfChars = this.urlAllowedChars.slice(0, this.urlAllowedChars.indexOf('-'));
         let generatedCode = null;
 
         function getCode(setOfChars, length = 6) {
@@ -262,7 +261,14 @@ UrlShortener.prototype = {
           });
 
         if (!generatedCode) {
-            let newCode = getCode(setOfChars);
+            let newCode = getCode(this.urlAllowedChars);
+
+            if (this.db.has(newCode)) {
+                while(this.db.has(newCode)) {
+                    newCode = getCode(this.urlAllowedChars);
+                }
+            }
+
             this.db.set(newCode, rest);
             return `${origin}/${newCode}`;
         } else {
