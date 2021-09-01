@@ -9,7 +9,7 @@
 
 
 
-/**
+/***
  * Returns the result of concatenation of two strings.
  *
  * @param {string} value1
